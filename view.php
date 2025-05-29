@@ -119,3 +119,19 @@
    `;
    });
 </script>
+
+
+<div class="col-md-3">
+                           <label for="date">Date</label>
+                           <div id="date-container">
+                              <?php
+                              $bulan = $this->input->get('bulan') ? $this->input->get('bulan') : date('Y-m');
+                              ?>
+                              <input
+                                 type="month"
+                                 name="bulan"
+                                 id="bulan"
+                                 class="form-control"
+                                 value="<?= $bulan ?>">
+                           </div>
+                        </div>

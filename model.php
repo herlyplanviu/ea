@@ -1,15 +1,20 @@
 <?php
 
-public function search_top_one_karyawan($type = 'monthly', $date = null)
+public function get_bulan($id_bulan = null)
     {
-        // Set default date to current month if not provided
-        if ($date === null) {
-            if ($type === 'daily') {
-                $date = date('Y-m-d'); // e.g., "2025-05-28"
-            } else {
-                $date = date('Y-m');   // e.g., "2025-05"
-            }
+        $this->db->select('id_bulan, nama_bulan');
+        $this->db->from('bulan');
+
+        if ($id_bulan != null) {
+            $this->db->where('id_bulan', $id_bulan);
         }
+
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function search_top_one_karyawan($bulan = null)
+    {
 
         $this->db->select('penilaian.pegawai, pegawai.nama_lengkap, pegawai.jabatan');
         $this->db->select('SUM(
@@ -21,11 +26,8 @@ public function search_top_one_karyawan($type = 'monthly', $date = null)
         $this->db->join('pegawai', 'pegawai.id_pegawai = penilaian.pegawai', 'left');
 
         // Apply date filtering
-        if ($type === 'daily') {
-            $this->db->where('DATE(tanggal)', $date);
-        } elseif ($type === 'monthly') {
-            $this->db->where('DATE_FORMAT(tanggal, "%Y-%m") =', $date);
-        }
+        $this->db->where('penilaian_bulan =', $bulan->nama_bulan);
+
 
         $this->db->group_by('penilaian.pegawai, pegawai.nama_lengkap, pegawai.jabatan');
         $this->db->order_by('total_nilai', 'DESC');
@@ -34,4 +36,3 @@ public function search_top_one_karyawan($type = 'monthly', $date = null)
         $query = $this->db->get();
         return $query->row();
     }
-
