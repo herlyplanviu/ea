@@ -135,3 +135,13 @@
                                  value="<?= $bulan ?>">
                            </div>
                         </div>
+
+
+<?php
+
+// 1 = Admin, 5 = Tim penilai, 6 = Pegawai
+if ($this->aauth->get_user_groups()[1]->id != 6) {
+   // Apa yang dilakukan oleh id 6 / pegawai
+}
+
+?>
